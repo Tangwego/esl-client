@@ -155,4 +155,32 @@ public class EslMessage {
 				.toString();
 	}
 
+	public String getMessageContent() {
+		StringBuilder sb = new StringBuilder("\"EslMessage\": {\n\"Message-Content-Type\":");
+		sb.append("\"" + getContentType() + "\"");
+		sb.append(",\n\"Message-Headers\":");
+		sb.append("{");
+		for (Map.Entry<Name, String> entry : headers.entrySet()) {
+			sb.append("\"" + entry.getKey() + "\"");
+			sb.append(":");
+			sb.append("\"" + entry.getValue() + "\"");
+			sb.append(",");
+		}
+		if(sb.charAt(sb.length() - 1) == ','){
+			sb.deleteCharAt(sb.length() - 1);
+		}
+		sb.append("}");
+		sb.append(", \n\"Message-Body\":");
+		sb.append("[");
+		for (String bd : body) {
+			sb.append("\"" + bd + "\"");
+			sb.append(",");
+		}
+		if(sb.charAt(sb.length() - 1) == ','){
+			sb.deleteCharAt(sb.length() - 1);
+		}
+		sb.append("]\n}");
+		return sb.toString();
+	}
+
 }

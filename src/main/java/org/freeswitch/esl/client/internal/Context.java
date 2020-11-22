@@ -127,7 +127,7 @@ public class Context implements IModEslApi {
 	public CommandResponse setEventSubscriptions(EventFormat format, String events) {
 
 		// temporary hack
-		checkState(format.equals(PLAIN), "Only 'plain' event format is supported at present");
+		// checkState(format.equals(PLAIN), "Only 'plain' event format is supported at present");
 
 		try {
 
@@ -145,6 +145,44 @@ public class Context implements IModEslApi {
 		}
 
 	}
+
+	/**
+	 * Set the current event subscription for this connection to the server.  Examples of the events
+	 * argument are:
+	 * <pre>
+	 *   ALL
+	 *   CHANNEL_CREATE CHANNEL_DESTROY HEARTBEAT
+	 *   CUSTOM conference::maintenance
+	 *   CHANNEL_CREATE CHANNEL_DESTROY CUSTOM conference::maintenance sofia::register sofia::expire
+	 * </pre>
+	 * Subsequent calls to this method replaces any previous subscriptions that were set.
+	 * </p>
+	 * Note: current implementation can only process 'plain' events.
+	 *
+	 * @param format can be { plain | xml }
+	 * @param events { all | space separated list of events }
+	 * @return a {@link org.freeswitch.esl.client.transport.CommandResponse} with the server's response.
+	 */
+	@Override
+	public CommandResponse cancelEventSubscriptions(EventFormat format, String events) {
+
+		try {
+
+			final StringBuilder sb = new StringBuilder();
+			sb.append("nixevent ").append(format.toString());
+			if (!isNullOrEmpty(events)) {
+				sb.append(' ').append(events);
+			}
+
+			final EslMessage response = getUnchecked(handler.sendApiSingleLineCommand(channel, sb.toString()));
+			return new CommandResponse(sb.toString(), response);
+
+		} catch (Throwable t) {
+			throw propagate(t);
+		}
+
+	}
+
 
 	/**
 	 * Cancel any existing event subscription.

@@ -60,6 +60,8 @@ public interface IModEslApi {
 
 	CommandResponse setEventSubscriptions(EventFormat format, String events);
 
+	CommandResponse cancelEventSubscriptions(EventFormat format, String events);
+
 	CommandResponse cancelEventSubscriptions();
 
 	CommandResponse addEventFilter(String eventHeader, String valueToFilter);

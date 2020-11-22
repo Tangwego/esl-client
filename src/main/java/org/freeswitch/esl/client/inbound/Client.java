@@ -206,7 +206,31 @@ public class Client implements IModEslApi {
 		return clientContext.get().setEventSubscriptions(format, events);
 	}
 
-	/**
+    /**
+     * Set the current event subscription for this connection to the server.  Examples of the events
+     * argument are:
+     * <pre>
+     *   ALL
+     *   CHANNEL_CREATE CHANNEL_DESTROY HEARTBEAT
+     *   CUSTOM conference::maintenance
+     *   CHANNEL_CREATE CHANNEL_DESTROY CUSTOM conference::maintenance sofia::register sofia::expire
+     * </pre>
+     * Subsequent calls to this method replaces any previous subscriptions that were set.
+     * </p>
+     * Note: current implementation can only process 'plain' events.
+     *
+     * @param format can be { plain | xml }
+     * @param events { all | space separated list of events }
+     * @return a {@link CommandResponse} with the server's response.
+     */
+    @Override
+    public CommandResponse cancelEventSubscriptions(EventFormat format, String events) {
+        checkConnected();
+        return clientContext.get().cancelEventSubscriptions(format, events);
+    }
+
+
+    /**
 	 * Cancel any existing event subscription.
 	 *
 	 * @return a {@link CommandResponse} with the server's response.

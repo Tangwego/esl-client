@@ -88,7 +88,8 @@ public abstract class AbstractEslClientHandler extends SimpleChannelInboundHandl
 	protected void channelRead0(ChannelHandlerContext ctx, EslMessage message) throws Exception {
 		final String contentType = message.getContentType();
 		if (contentType.equals(Value.TEXT_EVENT_PLAIN) ||
-				contentType.equals(Value.TEXT_EVENT_XML)) {
+				contentType.equals(Value.TEXT_EVENT_XML) ||
+				contentType.equals(Value.TEXT_EVENT_JSON)) {
 			//  transform into an event
 			final EslEvent eslEvent = new EslEvent(message);
 			if (eslEvent.getEventName().equals("BACKGROUND_JOB")) {
